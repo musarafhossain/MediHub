@@ -33,3 +33,12 @@ A clinic management system website.
         -   Daily/Monthly/Yearly Patient count
         -   Daily/Monthly/Yearly Amount collected
     -   # Export patient data iin excel format
+
+## Steps
+========================================
+
+1. Setup project
+    -   Virtual envuronment
+    -   Django setup and create django project
+    -   Postgresql setup and connect with django project
+    -   Include bootstrap5 in django project
