@@ -4,7 +4,6 @@ A clinic management system website.
 ## Clinic management System
 
 ## Feature
------------------------------
 -   # Doctor Panel
     -   Login (Credential created by super-admin)
     -   Reset Password
