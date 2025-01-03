@@ -2,7 +2,6 @@
 A clinic management system website.
 
 ## Clinic management System
------------------------------
 
 ## Feature
 -----------------------------
