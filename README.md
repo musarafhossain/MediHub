@@ -33,7 +33,6 @@ A clinic management system website.
     -   # Export patient data iin excel format
 
 ## Steps
-========================================
 
 1. Setup project
     -   Virtual envuronment
