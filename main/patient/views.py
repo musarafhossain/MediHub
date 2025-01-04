@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 def home(request):
@@ -6,6 +8,12 @@ def home(request):
 
 #Doctor Login
 def doctor_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            redirect('/')
     return render(request, 'doctor/login.html', {
         'page_title': 'Doctor Login'
     })
