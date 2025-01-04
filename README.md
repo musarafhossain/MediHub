@@ -2,10 +2,8 @@
 A clinic management system website.
 
 ## Clinic management System
------------------------------
 
 ## Feature
------------------------------
 -   # Doctor Panel
     -   Login (Credential created by super-admin)
     -   Reset Password
@@ -35,7 +33,6 @@ A clinic management system website.
     -   # Export patient data iin excel format
 
 ## Steps
-========================================
 
 1. Setup project
     -   Virtual envuronment
