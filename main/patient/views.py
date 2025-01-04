@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 # Create your views here.
@@ -14,12 +14,18 @@ def doctor_login(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('/') 
+            return redirect('home') 
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'doctor/login.html', {
         'page_title': 'Doctor Login'
     })
+
+#Doctor Logout
+def doctor_logout(request):
+    logout(request)
+    return redirect('doctor_login') 
+
 
 #Reset Password
 def doctor_reset_password(request):
