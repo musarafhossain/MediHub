@@ -31,4 +31,9 @@ def doctor_logout(request):
 def doctor_reset_password(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        request.user.set_password(password)
+        messages.success(request, 'Password Reset Successfully.')
+        return redirect('doctor_login') 
     return render(request, 'doctor/reset-password.html')
