@@ -29,4 +29,6 @@ def doctor_logout(request):
 
 #Reset Password
 def doctor_reset_password(request):
-    return render(request, 'doctor/reset_password.html')
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    return render(request, 'doctor/reset-password.html')
