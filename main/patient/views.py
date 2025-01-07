@@ -34,6 +34,7 @@ def doctor_reset_password(request):
     if request.method == 'POST':
         password = request.POST.get('password')
         request.user.set_password(password)
+        request.user.save()
         messages.success(request, 'Password Reset Successfully.')
         return redirect('doctor_login') 
     return render(request, 'doctor/reset-password.html')
