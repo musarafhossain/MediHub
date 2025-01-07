@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 
 # Create your views here.
@@ -26,7 +26,6 @@ def doctor_logout(request):
     logout(request)
     return redirect('doctor_login') 
 
-
 #Reset Password
 def doctor_reset_password(request):
     if not request.user.is_authenticated:
@@ -35,6 +34,7 @@ def doctor_reset_password(request):
         password = request.POST.get('password')
         request.user.set_password(password)
         request.user.save()
+        update_session_auth_hash(request, request.user)
         messages.success(request, 'Password Reset Successfully.')
-        return redirect('doctor_login') 
+        return redirect('home') 
     return render(request, 'doctor/reset-password.html')
