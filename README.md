@@ -1,4 +1,4 @@
-# MediHub
+# MediHub - Project
 A clinic management system website.
 
 ## Clinic management System
