@@ -30,7 +30,8 @@ def doctor_quick_add_patient(request):
             messages.success(request, "Patient added successfully")
         else:
             messages.warning(request, "Something went wrong!!")
-    fm = QuickPatientForm()
+    else:
+        fm = QuickPatientForm()
     return render(request, 'doctor/quick-add-patient.html', {
         'page_title': 'Quick Add Patient',
         'form': fm

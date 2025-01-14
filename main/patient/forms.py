@@ -46,3 +46,4 @@ class QuickPatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['name', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
+    
