@@ -1,4 +1,26 @@
 {% extends 'layout.html' %}
 {% block main %}
-    <h1>This is quick add patient</h1>
+    <div class="card">
+        <h4 class="card-header">Add Patient</h4>
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-2">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form action="" method="post" novalidate>
+                {% csrf_token %}
+                <table class="table table-bordered">
+                    {{form.as_table}}
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" class="btn btn-sm btn-success" value="Add Patient">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
 {% endblock %}

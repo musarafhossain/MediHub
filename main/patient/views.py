@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import CustomAuthenticationForm, CustomPasswordChangeForm
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -22,8 +23,17 @@ def doctor_dashbaord(request):
 def doctor_quick_add_patient(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
+    if request.method=='POST':
+        fm = QuickPatientForm(request.POST)
+        if fm.is_valid():
+            fm.save()
+            messages.success(request, "Patient added successfully")
+        else:
+            messages.warning(request, "Something went wrong!!")
+    fm = QuickPatientForm()
     return render(request, 'doctor/quick-add-patient.html', {
         'page_title': 'Quick Add Patient',
+        'form': fm
     })
 
 #Doctor Login
@@ -60,7 +70,7 @@ def doctor_change_password(request):
         if fm.is_valid():
             fm.save()
             update_session_auth_hash(request, fm.user)
-            return redirect('home')
+            messages.success(request, "Password has been changed.")
     else:
         fm = CustomPasswordChangeForm(user=request.user)
     return render(request, 'doctor/change-password.html', {

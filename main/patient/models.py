@@ -17,4 +17,4 @@ class Patient(models.Model):
     detail = models.TextField(null=True)
     medicine_detail = models.TextField(null=True)
     note = models.TextField(null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)

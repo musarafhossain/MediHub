@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from .models import Patient
 
 class CustomAuthenticationForm(AuthenticationForm):
     # Override the error messages for invalid login and inactive account
@@ -40,3 +41,8 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             'class': 'form-control', 
             'placeholder': 'Confirm your new password'
         })
+
+class QuickPatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['name', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
