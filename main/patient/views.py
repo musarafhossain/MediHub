@@ -5,6 +5,8 @@ from .forms import CustomAuthenticationForm
 
 # Create your views here.
 def home(request):
+    if request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'doctor/home.html')
 
 #Doctor Login
