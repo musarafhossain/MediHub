@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from .forms import CustomAuthenticationForm
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm
 
 # Create your views here.
 def home(request):
-    if request.user.is_authenticated:
-        return redirect('login')
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
     return render(request, 'doctor/home.html')
 
 #Doctor Login
@@ -35,14 +35,18 @@ def doctor_logout(request):
     return redirect('doctor_login') 
 
 #Reset Password
-def doctor_reset_password(request):
+def doctor_change_password(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     if request.method == 'POST':
-        password = request.POST.get('password')
-        request.user.set_password(password)
-        request.user.save()
-        update_session_auth_hash(request, request.user)
-        messages.success(request, 'Password Reset Successfully.')
-        return redirect('home') 
-    return render(request, 'doctor/reset-password.html')
+        fm = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if fm.is_valid():
+            fm.save()
+            update_session_auth_hash(request, fm.user)
+            return redirect('home')
+    else:
+        fm = CustomPasswordChangeForm(user=request.user)
+    return render(request, 'doctor/change-password.html', {
+        'page_title': 'Change Password',
+        'form': fm,
+    })
