@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
   <h1>This is from the home page.</h1>
-  <a href="{% url 'doctor_login' %}">Go Login</a>
+  <h1><a href="{% url 'doctor_dashboard' %}">Dashboard</a></h1>
   {% if request.user.is_authenticated %}
     <a href="{% url 'doctor_logout' %}">Logout</a>
     <a href="{% url 'doctor_change_password' %}" class='btn btn-primary btn-sm'>Reset Password</a>

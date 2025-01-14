@@ -1,13 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib import messages
 from .forms import CustomAuthenticationForm, CustomPasswordChangeForm
 
 # Create your views here.
 def home(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
-    return render(request, 'doctor/home.html')
+    return render(request, 'doctor/home.html', {
+        'page_title': 'Home',
+    })
+
+#Doctor Dashboard
+def doctor_dashbaord(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    return render(request, 'doctor/dashboard.html', {
+        'page_title': 'Home',
+    })
+
+#Quick add patient
+def doctor_quick_add_patient(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    return render(request, 'doctor/quick-add-patient.html', {
+        'page_title': 'Quick Add Patient',
+    })
 
 #Doctor Login
 def doctor_login(request):
