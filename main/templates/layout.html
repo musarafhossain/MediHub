@@ -8,7 +8,7 @@
                 <a href="{% url 'home' %}" class="list-group-item list-group-item-action">Home</a>
                 <a href="{% url 'doctor_dashboard' %}" class="list-group-item list-group-item-action {% if 'dashboard' in request.path %} active {% endif %}">Dashboard</a>
                 <a href="{% url 'quick-add-patient' %}" class="list-group-item list-group-item-action {% if 'quick-add-patient' in request.path %} active {% endif %}">Quick add patient</a>
-                <a href="#" class="list-group-item list-group-item-action">Manage patient</a>
+                <a href="{% url 'all-patients' %}" class="list-group-item list-group-item-action{% if 'patients' in request.path %} active {% endif %}">Manage patient</a>
                 <a href="{% url 'doctor_logout' %}" class="list-group-item text-danger list-group-item-action">Logout</a>
                 <a href="{% url 'doctor_change_password' %}" class="list-group-item text-danger list-group-item-action">Reset Password</a>
             </div>

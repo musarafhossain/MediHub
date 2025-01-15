@@ -2,20 +2,34 @@
 {% load filters %}
 {% block main %}
     <div class="card">
-        <h4 class="card-header">Add Patient</h4>
+        <h4 class="card-header">Add Patient ({{data.count}})</h4>
         <div class="card-body">
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Gender</th>
-                </tr>
-                <tr>
-                    <td>Musaraf</td>
-                    <td>20</td>
-                    <td>Male</td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover">
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Detail</th>
+                        <th>Medicine</th>
+                        <th>Amount</th>
+                    </tr>
+                    {% if data %}
+                        {% for row in data %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.age}}</td>
+                                <td>{{row.gender}}</td>
+                                <td>{{row.detail}}</td>
+                                <td>{{row.medicine_detail}}</td>
+                                <td>{{row.amount}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

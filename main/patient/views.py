@@ -17,7 +17,7 @@ def doctor_dashbaord(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     return render(request, 'doctor/dashboard.html', {
-        'page_title': 'Home',
+        'page_title': 'Dashboard',
     })
 
 #Quick add patient
@@ -39,11 +39,11 @@ def doctor_quick_add_patient(request):
     })
 
 #Doctor view all patient
-def all_patient(request):
-    data = Patient.get.all()
-    return render(request, 'all-patients.html', {
+def all_patients(request):
+    data = Patient.objects.all()
+    return render(request, 'doctor/all-patients.html', {
         'data': data,
-        'page-title': 'All Patients',
+        'page_title': 'All Patients',
     })
 
 #Doctor Login
