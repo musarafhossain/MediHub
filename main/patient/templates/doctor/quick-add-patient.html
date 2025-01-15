@@ -2,7 +2,7 @@
 {% load filters %}
 {% block main %}
     <div class="card">
-        <h4 class="card-header">Add Patient</h4>
+        <h4 class="card-header">{{heading}}</h4>
         <div class="card-body">
             {% if messages %}
                 {% for message in messages %}
@@ -38,7 +38,7 @@
                     {% endfor %}
                     <tr>
                         <td colspan="2">
-                            <input type="submit" class="btn btn-sm btn-success" value="Add Patient">
+                            <input type="submit" class="btn btn-sm btn-success" value="{{heading}}">
                         </td>
                     </tr>
                 </table>

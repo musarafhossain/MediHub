@@ -35,7 +35,8 @@ def doctor_quick_add_patient(request):
         fm = QuickPatientForm()
     return render(request, 'doctor/quick-add-patient.html', {
         'page_title': 'Quick Add Patient',
-        'form': fm
+        'form': fm,
+        'heading':'Quick Add Patient',
     })
 
 #View all patient
@@ -63,8 +64,31 @@ def add_patients(request):
         fm = PatientForm()
     return render(request, 'doctor/quick-add-patient.html', {
         'page_title': 'Add Patient',
-        'form': fm
+        'form': fm,
+        'heading':'Add Patient',
     })
+
+#Update patient
+def update_patients(request, id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if id is not None:
+        patient = Patient.objects.get(id=id)
+        if request.method=='POST':
+            fm = PatientForm(request.POST, instance=patient)
+            if fm.is_valid():
+                fm.save()
+                messages.success(request, "Patient updated successfully")
+            else:
+                messages.warning(request, "Something went wrong!!")
+            redirect('update-patients', id)
+        else:
+            fm = PatientForm(instance=patient)
+        return render(request, 'doctor/quick-add-patient.html', {
+            'page_title': 'Update Patient',
+            'form': fm,
+            'heading':'Update Patient',
+        })
 
 #Delete patient
 def delete_patients(request, id):

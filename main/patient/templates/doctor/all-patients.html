@@ -3,7 +3,7 @@
 {% block main %}
     <div class="card">
         <h4 class="card-header">
-            Add Patient ({{data.count}})
+            All Patients ({{data.count}})
             <a href="{% url 'add-patients' %}" class="float-end btn btn-sm btn-success"><i class="fa-solid fa-plus"></i>Add Patients</a>
         </h4>
         <div class="card-body">
@@ -25,15 +25,17 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{row.name}}</td>
-                                <td>{{row.added_time}}</td>
+                                <td>{{row.added_time|date:'d-m-Y'}}</td>
                                 <td>{{row.age}}</td>
                                 <td>{{row.gender}}</td>
                                 <td>{{row.detail}}</td>
                                 <td>{{row.medicine_detail}}</td>
                                 <td>{{row.amount}}</td>
                                 <td>
-                                    <a href="#" class="text-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a href="{% url 'delete-patients' row.id %}" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                                    <a href="{% url 'update-patients' row.id %}" class="text-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="{% url 'delete-patients' row.id %}" class="text-danger" onclick="return confirm('Are you sure you want to delete this patient?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}
