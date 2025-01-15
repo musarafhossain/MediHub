@@ -2,7 +2,10 @@
 {% load filters %}
 {% block main %}
     <div class="card">
-        <h4 class="card-header">Add Patient ({{data.count}})</h4>
+        <h4 class="card-header">
+            Add Patient ({{data.count}})
+            <a href="#" class="float-end btn btn-sm btn-success"><i class="fa-solid fa-plus"></i>Add Patients</a>
+        </h4>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover">
@@ -14,6 +17,7 @@
                         <th>Detail</th>
                         <th>Medicine</th>
                         <th>Amount</th>
+                        <th>Action</th>
                     </tr>
                     {% if data %}
                         {% for row in data %}
@@ -25,6 +29,10 @@
                                 <td>{{row.detail}}</td>
                                 <td>{{row.medicine_detail}}</td>
                                 <td>{{row.amount}}</td>
+                                <td>
+                                    <a href="#" class="text-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="#" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                                </td>
                             </tr>
                         {% endfor %}
                     {% endif %}
