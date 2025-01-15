@@ -33,7 +33,7 @@
                                 <td>{{row.amount}}</td>
                                 <td>
                                     <a href="#" class="text-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a href="#" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                                    <a href="{% url 'delete-patients' row.id %}" class="text-danger"><i class="fa-solid fa-trash"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

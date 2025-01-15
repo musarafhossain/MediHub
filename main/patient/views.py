@@ -71,8 +71,9 @@ def delete_patients(request, id):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     if id is not None:
-        Patient.objects.delete(id=id)
-    redirect('all-patients')
+        patient = Patient.objects.get(id=id)
+        patient.delete()
+    return redirect('all-patients')
 
 #Doctor Login
 def doctor_login(request):
