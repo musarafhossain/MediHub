@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm
 from django.contrib import messages
+from .models import Patient
 
 # Create your views here.
 def home(request):
@@ -35,6 +36,14 @@ def doctor_quick_add_patient(request):
     return render(request, 'doctor/quick-add-patient.html', {
         'page_title': 'Quick Add Patient',
         'form': fm
+    })
+
+#Doctor view all patient
+def all_patient(request):
+    data = Patient.get.all()
+    return render(request, 'all-patients.html', {
+        'data': data,
+        'page-title': 'All Patients',
     })
 
 #Doctor Login
