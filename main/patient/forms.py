@@ -46,4 +46,19 @@ class QuickPatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['name', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
+        widgets = {
+            'detail': forms.Textarea(attrs={'rows': '5'}),
+            'medicine_detail': forms.Textarea(attrs={'rows': '5'}),
+        }
+
+class PatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = '__all__'
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': '5'}),
+            'detail': forms.Textarea(attrs={'rows': '5'}),
+            'medicine_detail': forms.Textarea(attrs={'rows': '5'}),
+            'note': forms.Textarea(attrs={'rows': '5'}),
+        }
     

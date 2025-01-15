@@ -18,3 +18,4 @@ class Patient(models.Model):
     medicine_detail = models.TextField(null=True)
     note = models.TextField(null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    added_time = models.DateTimeField(auto_now_add=True, null=True)

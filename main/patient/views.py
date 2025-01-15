@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm
 from django.contrib import messages
 from .models import Patient
 
@@ -38,12 +38,32 @@ def doctor_quick_add_patient(request):
         'form': fm
     })
 
-#Doctor view all patient
+#View all patient
 def all_patients(request):
-    data = Patient.objects.all()
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    data = Patient.objects.all().order_by('-id')
     return render(request, 'doctor/all-patients.html', {
         'data': data,
         'page_title': 'All Patients',
+    })
+
+#Add patient
+def add_patients(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if request.method=='POST':
+        fm = PatientForm(request.POST)
+        if fm.is_valid():
+            fm.save()
+            messages.success(request, "Patient added successfully")
+        else:
+            messages.warning(request, "Something went wrong!!")
+    else:
+        fm = PatientForm()
+    return render(request, 'doctor/quick-add-patient.html', {
+        'page_title': 'Add Patient',
+        'form': fm
     })
 
 #Doctor Login

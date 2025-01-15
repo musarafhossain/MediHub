@@ -4,7 +4,7 @@
     <div class="card">
         <h4 class="card-header">
             Add Patient ({{data.count}})
-            <a href="#" class="float-end btn btn-sm btn-success"><i class="fa-solid fa-plus"></i>Add Patients</a>
+            <a href="{% url 'add-patients' %}" class="float-end btn btn-sm btn-success"><i class="fa-solid fa-plus"></i>Add Patients</a>
         </h4>
         <div class="card-body">
             <div class="table-responsive">
@@ -12,6 +12,7 @@
                     <tr>
                         <th>Sl No.</th>
                         <th>Name</th>
+                        <th>Added Time</th>
                         <th>Age</th>
                         <th>Gender</th>
                         <th>Detail</th>
@@ -24,6 +25,7 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{row.name}}</td>
+                                <td>{{row.added_time}}</td>
                                 <td>{{row.age}}</td>
                                 <td>{{row.gender}}</td>
                                 <td>{{row.detail}}</td>
