@@ -66,6 +66,14 @@ def add_patients(request):
         'form': fm
     })
 
+#Delete patient
+def delete_patients(request, id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if id is not None:
+        Patient.objects.delete(id=id)
+    redirect('all-patients')
+
 #Doctor Login
 def doctor_login(request):
     if request.user.is_authenticated:
