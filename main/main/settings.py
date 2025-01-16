@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,6 +133,10 @@ MESSAGE_TAGS = {
     constants.WARNING: 'warning',
     constants.ERROR: 'danger',
 }
+
+CRONJOBS = [
+    ('* * * * *', 'patient.tasks.send_next_visit_email_notification', '>> /tmp/scheduled_job.log')
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
