@@ -45,7 +45,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 class QuickPatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['name', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
+        fields = ['name', 'email', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
         widgets = {
             'detail': forms.Textarea(attrs={'rows': '5'}),
             'medicine_detail': forms.Textarea(attrs={'rows': '5'}),
