@@ -153,7 +153,6 @@ def n_patients(request):
     for patient in patients:
         next_visit_date = patient.visit_date + timedelta(days=patient.next_visit)
         notification_date = next_visit_date - timedelta(days=1)
-        print(patient.name, notification_date, date.today())
         if notification_date == date.today():
             # Prepare email content
             subject = 'Doctor Next Visit'
