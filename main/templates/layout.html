@@ -3,7 +3,7 @@
 <div class="container-fluid mt-3 mb-3">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-12 col-md-3 mb-3">
+        <div class="col-12 col-md-3 mb-3" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine" data-aos-duration="1000">
             <div class="list-group">
                 <a href="{% url 'home' %}" class="list-group-item list-group-item-action">Home</a>
                 <a href="{% url 'doctor_dashboard' %}" class="list-group-item list-group-item-action {% if 'dashboard' in request.path %} active {% endif %}">Dashboard</a>
