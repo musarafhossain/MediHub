@@ -3,12 +3,13 @@
 <div class="container-fluid mt-3 mb-3">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-12 col-md-3 mb-3" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine" data-aos-duration="1000">
+        <div class="col-12 col-md-3 mb-3">
             <div class="list-group">
                 <a href="{% url 'home' %}" class="list-group-item list-group-item-action">Home</a>
                 <a href="{% url 'doctor_dashboard' %}" class="list-group-item list-group-item-action {% if 'dashboard' in request.path %} active {% endif %}">Dashboard</a>
                 <a href="{% url 'quick-add-patient' %}" class="list-group-item list-group-item-action {% if 'quick-add-patient' in request.path %} active {% endif %}">Quick add patient</a>
                 <a href="{% url 'all-patients' %}" class="list-group-item list-group-item-action{% if 'patients' in request.path %} active {% endif %}">Manage patient</a>
+                <a href="{% url 'reports' %}" class="list-group-item list-group-item-action{% if 'reports' in request.path %} active {% endif %}">Reports</a>
                 <a href="{% url 'doctor_logout' %}" class="list-group-item text-danger list-group-item-action">Logout</a>
             </div>
         </div>

@@ -182,3 +182,10 @@ def n_patients(request):
     return render(request, 'doctor/n_patients.html', {
         'count': count,
     })
+
+def reports(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    return render(request, 'doctor/reports.html', {
+        'page_title': 'Reports',
+    })
