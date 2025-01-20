@@ -4,7 +4,30 @@
     <div class="card" data-aos="fade-left" data-aos-offset="10" data-aos-easing="linear" data-aos-duration="500">
         <h4 class="card-header">Reports</h4>
         <div class="card-body">
-            <div id="chartDaily"></div>
+            <div class="row">
+                <div class="col-4">
+                    <select class="mb-3">
+                        <option>--- Select Year ---</option>
+                        {% for year in years %}
+                            <option>{{year.visit_date__year}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-4">
+                    Chart Type:
+                    <select class="mb-3">
+                        <option>--- Select Type ---</option>
+                        <option class="daily" selected>Daily</option>
+                        <option class="monthly">Monthly</option>
+                        <option class="yearly">Yearly</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <div id="chartDaily"></div>
+                </div>
+            </div>
             <div id="chartMonthly hide"></div>
         </div>
     </div>

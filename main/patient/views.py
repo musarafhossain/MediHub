@@ -192,9 +192,7 @@ def reports(request):
     selectedYear = date.today().year
     selectedMonth = date.today().month
 
-    years = dPatients = (
-        Patient.objects.values('visit_date__year').annotate(total=Count('id'))
-    )
+    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
 
     # Chart By Date (Daily Data for the Current Month)
     dPatients = (
@@ -226,4 +224,5 @@ def reports(request):
             'monthlyChartLabels': monthChartLabels,
             'monthlyChartValues': monthChartValues,
         },
+        'years': years,
     })
