@@ -7,6 +7,8 @@ from datetime import date, timedelta
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.db.models import Count
+import calendar
 
 # Create your views here.
 def home(request):
@@ -186,6 +188,42 @@ def n_patients(request):
 def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
+
+    selectedYear = date.today().year
+    selectedMonth = date.today().month
+
+    years = dPatients = (
+        Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    )
+
+    # Chart By Date (Daily Data for the Current Month)
+    dPatients = (
+        Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth)
+        .values('visit_date')
+        .annotate(total=Count('id'))
+    )
+    dailyChartLabels = [data['visit_date'].strftime('%d-%m-%y') for data in dPatients]
+    dailyChartValues = [data['total'] for data in dPatients]
+
+    # Chart By Month (Monthly Data for the Current Year)
+    mPatients = (
+        Patient.objects.filter(visit_date__year=selectedYear)
+        .values('visit_date__month')
+        .annotate(total=Count('id'))
+        .order_by('visit_date__month')  # Ensure chronological order
+    )
+    monthChartLabels = [calendar.month_name[data['visit_date__month']] for data in mPatients]
+    monthChartValues = [data['total'] for data in mPatients]
+
     return render(request, 'doctor/reports.html', {
         'page_title': 'Reports',
+        'dailyPatients': dPatients,
+        'dailyChart': {
+            'dailyChartLabels': dailyChartLabels,
+            'dailyChartValues': dailyChartValues,
+        },
+        'monthlyChart': {
+            'monthlyChartLabels': monthChartLabels,
+            'monthlyChartValues': monthChartValues,
+        },
     })

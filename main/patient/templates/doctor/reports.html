@@ -1,4 +1,84 @@
 {% extends 'layout.html' %}
 {% block main %}
-    <h1>This is Report</h1>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div class="card" data-aos="fade-left" data-aos-offset="10" data-aos-easing="linear" data-aos-duration="500">
+        <h4 class="card-header">Reports</h4>
+        <div class="card-body">
+            <div id="chartDaily"></div>
+            <div id="chartMonthly hide"></div>
+        </div>
+    </div>
+    <script>
+        var dailyOptions = {
+          series: [{
+            name: "Desktops",
+            data: {{ dailyChart.dailyChartValues|safe }}
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Daily Chart',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: {{ dailyChart.dailyChartLabels|safe }},
+        }
+        };
+
+        var dailyChart = new ApexCharts(document.querySelector("#chartDaily"), dailyOptions);
+        dailyChart.render();
+
+        var monthlyOptions = {
+          series: [{
+            name: "Desktops",
+            data: {{ monthlyChart.monthlyChartValues|safe }}
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Monthly Chart',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: {{ monthlyChart.monthlyChartLabels|safe }},
+        }
+        };
+
+        var monthlyChart = new ApexCharts(document.querySelector("#chartMonthly"), monthlyOptions);
+        monthlyChart.render();
+    </script>
 {% endblock %}
