@@ -208,17 +208,15 @@ def reports(request):
         Patient.objects.filter(visit_date__year=selectedYear)
         .values('visit_date__month')
         .annotate(total=Count('id'))
-        .order_by('visit_date__month')  # Ensure chronological order
     )
     monthChartLabels = [calendar.month_name[data['visit_date__month']] for data in mPatients]
     monthChartValues = [data['total'] for data in mPatients]
     
     # Chart By Year
     yPatients = (
-        Patient.objects.filter(visit_date__year=selectedYear)
+        Patient.objects.filter()
         .values('visit_date__year')
         .annotate(total=Count('id'))
-        .order_by('visit_date__year')  
     )
     yearChartLabels = [data['visit_date__year'] for data in yPatients]
     yearChartValues = [data['total'] for data in yPatients]

@@ -5,15 +5,6 @@
         <h4 class="card-header">Reports</h4>
         <div class="card-body">
             <div class="row">
-                <div class="col-4">
-                    <select class="mb-3 form-control">
-                        <option>--- Select Year ---</option>
-                        {% for year in years %}
-                            <option>{{year.visit_date__year}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
                 <div class="col-6">
                     <form action="" method="get">
                       <div class="d-flex justify-content-start">
@@ -30,7 +21,18 @@
                       </div>
                     </form>
                 </div>
-                {% if request.GET.chart_type and request.GET.chart_type == 'daily' %}
+                {% if request.GET.chart_type and request.GET.chart_type != 'yearly' %}
+                  <div class="col-4">
+                      <select class="mb-3 form-control">
+                          <option>--- Select Year ---</option>
+                          {% for year in years %}
+                              <option>{{year.visit_date__year}}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                {% endif %}
+
+                {% if not request.GET.chart_type or request.GET.chart_type and request.GET.chart_type == 'daily' %}
                   <div class="col-12">
                       <div id="chartDaily"></div>
                   </div>
@@ -140,7 +142,7 @@
           curve: 'straight'
         },
         title: {
-          text: 'Monthly Chart',
+          text: 'Yearly Chart',
           align: 'left'
         },
         grid: {
