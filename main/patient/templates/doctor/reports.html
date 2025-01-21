@@ -31,14 +31,16 @@
                                   {% endfor %}
                             </select>
                         </div>
-                        <div class="col-4">
-                            <select name="month" class="mb-3 form-control">
-                                <option disabled>--- Select Month ---</option>
-                                  {% for month in months %}
-                                      <option value="{{month.number}}" {% if month.name == curr_month %} selected {% endif %} >{{month.name}}</option>
-                                  {% endfor %}
-                            </select>
-                        </div>
+                        {% if request.GET.chart_type != 'monthly' %}
+                          <div class="col-4">
+                              <select name="month" class="mb-3 form-control">
+                                  <option disabled>--- Select Month ---</option>
+                                    {% for month in months %}
+                                        <option value="{{month.number}}" {% if month.name == curr_month %} selected {% endif %} >{{month.name}}</option>
+                                    {% endfor %}
+                              </select>
+                          </div>
+                        {% endif %}
                         <div class="col-4">
                         <button type="submit" class="btn btn-secondary">Submit</button>
                         </div>
