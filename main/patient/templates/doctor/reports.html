@@ -5,8 +5,8 @@
         <h4 class="card-header">Reports</h4>
         <div class="card-body">
             <div class="row">
-                <div class="col-6">
-                    <form action="" method="get">
+              <form action="" method="get" class="row">
+                <div class="col-4">
                       <div class="d-flex justify-content-start">
                         <div class="me-2">
                           <select name="chart_type" class="mb-3 form-control">
@@ -19,29 +19,45 @@
                           <button type="submit" class="btn btn-secondary">Change</button>
                         </div>
                       </div>
-                    </form>
-                </div>
-                {% if request.GET.chart_type and request.GET.chart_type != 'yearly' %}
-                  <div class="col-4">
-                      <select class="mb-3 form-control">
-                          <option>--- Select Year ---</option>
-                          {% for year in years %}
-                              <option>{{year.visit_date__year}}</option>
-                          {% endfor %}
-                      </select>
                   </div>
-                {% endif %}
-
+                  {% if not request.GET.chart_type or request.GET.chart_type and request.GET.chart_type != 'yearly' %}
+                    <div class="col-8">
+                      <div class="row">
+                        <div class="col-4">
+                            <select name="year" class="mb-3 form-control">
+                                <option disabled>--- Select Year ---</option>
+                                  {% for year in years %}
+                                    <option {% if year.visit_date__year == curr_year %} selected {% endif %} >{{year.visit_date__year}}</option>
+                                  {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <select name="month" class="mb-3 form-control">
+                                <option disabled>--- Select Month ---</option>
+                                  {% for month in months %}
+                                      <option value="{{month.number}}" {% if month.name == curr_month %} selected {% endif %} >{{month.name}}</option>
+                                  {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                </form>
                 {% if not request.GET.chart_type or request.GET.chart_type and request.GET.chart_type == 'daily' %}
                   <div class="col-12">
                       <div id="chartDaily"></div>
                   </div>
                 {% endif %}
+
                 {% if request.GET.chart_type and request.GET.chart_type == 'monthly' %}
                   <div class="col-12">
                       <div id="chartMonthly"></div>
                   </div>
                 {% endif %}
+
                 {% if request.GET.chart_type and request.GET.chart_type == 'yearly' %}
                   <div class="col-12">
                       <div id="chartYearly"></div>

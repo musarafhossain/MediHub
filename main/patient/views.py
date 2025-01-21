@@ -188,27 +188,44 @@ def n_patients(request):
 def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
+    
+    if request.GET.get('year'):
+        selectedYear = int(request.GET.get('year'))
+    else:
+        selectedYear = date.today().year
+    if request.GET.get('month'):
+        selectedMonth = int(request.GET.get('month'))
+    else:
+        selectedMonth = date.today().month
 
-    selectedYear = date.today().year
-    selectedMonth = date.today().month
-
-    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
-    months = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
-
-    # Chart By Date (Daily Data for the Current Month)
+    # Chart By Date
     dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Count('id'))
-    dailyChartLabels = [data['visit_date'].strftime('%d-%m-%y') for data in dPatients]
-    dailyChartValues = [data['total'] for data in dPatients]
+    dailyChartLabels, dailyChartValues = [], []
+    for data in dPatients:
+        dailyChartLabels.append(data['visit_date'].strftime('%d-%m-%y'))
+        dailyChartValues.append(data['total'])
 
-    # Chart By Month (Monthly Data for the Current Year)
+    # Chart By Month
     mPatients = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
-    monthChartLabels = [calendar.month_name[data['visit_date__month']] for data in mPatients]
-    monthChartValues = [data['total'] for data in mPatients]
+    monthChartLabels, monthChartValues = [], []
+    for data in mPatients:
+        monthChartLabels.append(calendar.month_name[data['visit_date__month']])
+        monthChartValues.append(data['total'])
     
     # Chart By Year
     yPatients = Patient.objects.filter().values('visit_date__year').annotate(total=Count('id'))
-    yearChartLabels = [data['visit_date__year'] for data in yPatients]
-    yearChartValues = [data['total'] for data in yPatients]
+    yearChartLabels, yearChartValues = [], []
+    for data in yPatients:
+        yearChartLabels.append(data['visit_date__year'])
+        yearChartValues.append(data['total'])
+
+    # Get all Year & Month
+    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    months = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
+    monthName = [{
+        'name': calendar.month_name[month['visit_date__month']],
+        'number': month['visit_date__month']
+    } for month in months]
 
     return render(request, 'doctor/reports.html', {
         'page_title': 'Reports',
@@ -226,4 +243,7 @@ def reports(request):
             'yearlyChartValues': yearChartValues,
         },
         'years': years,
+        'months': monthName,
+        'curr_year': selectedYear,
+        'curr_month': calendar.month_name[selectedMonth],
     })
