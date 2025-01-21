@@ -27,7 +27,7 @@ A clinic management system website.
         -   Amount
         -   Next Visit
     -   # Send notification to patient according to next visit date (before 1 day, this can be set from doctor) - SMS|Email
-    -   Reports
+    -   # Reports
         -   Daily/Monthly/Yearly Patient count
         -   Daily/Monthly/Yearly Amount collected
     -   # Export patient data iin excel format
