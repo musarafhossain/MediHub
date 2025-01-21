@@ -193,34 +193,22 @@ def reports(request):
     selectedMonth = date.today().month
 
     years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    months = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
 
     # Chart By Date (Daily Data for the Current Month)
-    dPatients = (
-        Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth)
-        .values('visit_date')
-        .annotate(total=Count('id'))
-    )
+    dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Count('id'))
     dailyChartLabels = [data['visit_date'].strftime('%d-%m-%y') for data in dPatients]
     dailyChartValues = [data['total'] for data in dPatients]
 
     # Chart By Month (Monthly Data for the Current Year)
-    mPatients = (
-        Patient.objects.filter(visit_date__year=selectedYear)
-        .values('visit_date__month')
-        .annotate(total=Count('id'))
-    )
+    mPatients = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
     monthChartLabels = [calendar.month_name[data['visit_date__month']] for data in mPatients]
     monthChartValues = [data['total'] for data in mPatients]
     
     # Chart By Year
-    yPatients = (
-        Patient.objects.filter()
-        .values('visit_date__year')
-        .annotate(total=Count('id'))
-    )
+    yPatients = Patient.objects.filter().values('visit_date__year').annotate(total=Count('id'))
     yearChartLabels = [data['visit_date__year'] for data in yPatients]
     yearChartValues = [data['total'] for data in yPatients]
-    print(yearChartLabels)
 
     return render(request, 'doctor/reports.html', {
         'page_title': 'Reports',
