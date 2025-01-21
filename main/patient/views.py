@@ -189,10 +189,22 @@ def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     
+    # Get all Year & Month
+    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    selectedYear = date.today().year
     if request.GET.get('year'):
         selectedYear = int(request.GET.get('year'))
     else:
-        selectedYear = date.today().year
+        if years:
+            year_values = [year['visit_date__year'] for year in years]
+            selectedYear = date.today().year if date.today().year in year_values else year_values[0]
+
+    months = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
+    monthName = [{
+        'name': calendar.month_name[month['visit_date__month']],
+        'number': month['visit_date__month'] 
+    } for month in months]
+
     if request.GET.get('month'):
         selectedMonth = int(request.GET.get('month'))
     else:
@@ -221,13 +233,7 @@ def reports(request):
         yearChartLabels.append(data['visit_date__year'])
         yearChartValues.append(data['total'])
 
-    # Get all Year & Month
-    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
-    months = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
-    monthName = [{
-        'name': calendar.month_name[month['visit_date__month']],
-        'number': month['visit_date__month']
-    } for month in months]
+    
 
     return render(request, 'doctor/reports.html', {
         'page_title': 'Reports',
