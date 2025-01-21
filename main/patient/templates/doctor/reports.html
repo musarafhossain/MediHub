@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-4">
-                    <select class="mb-3">
+                    <select class="mb-3 form-control">
                         <option>--- Select Year ---</option>
                         {% for year in years %}
                             <option>{{year.visit_date__year}}</option>
@@ -14,21 +14,38 @@
                     </select>
                 </div>
 
-                <div class="col-4">
-                    Chart Type:
-                    <select class="mb-3">
-                        <option>--- Select Type ---</option>
-                        <option class="daily" selected>Daily</option>
-                        <option class="monthly">Monthly</option>
-                        <option class="yearly">Yearly</option>
-                    </select>
+                <div class="col-6">
+                    <form action="" method="get">
+                      <div class="d-flex justify-content-start">
+                        <div class="me-2">
+                          <select name="chart_type" class="mb-3 form-control">
+                              <option value="daily" {% if request.GET.chart_type and request.GET.chart_type == 'daily' %} selected {% endif %}>Daily</option>
+                              <option value="monthly" {% if request.GET.chart_type and request.GET.chart_type == 'monthly' %} selected {% endif %}>Monthly</option>
+                              <option value="yearly" {% if request.GET.chart_type and request.GET.chart_type == 'yearly' %} selected {% endif %}>Yearly</option>
+                          </select>
+                        </div>
+                        <div>
+                          <button type="submit" class="btn btn-secondary">Change</button>
+                        </div>
+                      </div>
+                    </form>
                 </div>
-
-                <div class="col-12">
-                    <div id="chartDaily"></div>
-                </div>
+                {% if request.GET.chart_type and request.GET.chart_type == 'daily' %}
+                  <div class="col-12">
+                      <div id="chartDaily"></div>
+                  </div>
+                {% endif %}
+                {% if request.GET.chart_type and request.GET.chart_type == 'monthly' %}
+                  <div class="col-12">
+                      <div id="chartMonthly"></div>
+                  </div>
+                {% endif %}
+                {% if request.GET.chart_type and request.GET.chart_type == 'yearly' %}
+                  <div class="col-12">
+                      <div id="chartYearly"></div>
+                  </div>
+                {% endif %}
             </div>
-            <div id="chartMonthly hide"></div>
         </div>
     </div>
     <script>
@@ -103,5 +120,41 @@
 
         var monthlyChart = new ApexCharts(document.querySelector("#chartMonthly"), monthlyOptions);
         monthlyChart.render();
+        
+        var yearlyOptions = {
+          series: [{
+            name: "Desktops",
+            data: {{ yearlyChart.yearlyChartValues|safe }}
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Monthly Chart',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: {{ yearlyChart.yearlyChartLabels|safe }},
+        }
+        };
+
+        var yearlyChart = new ApexCharts(document.querySelector("#chartYearly"), yearlyOptions);
+        yearlyChart.render();
     </script>
 {% endblock %}
