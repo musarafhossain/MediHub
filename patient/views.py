@@ -105,48 +105,6 @@ def delete_patients(request, id):
         patient.delete()
     return redirect('all-patients')
 
-#Doctor Login
-def doctor_login(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    if request.method == 'POST':
-        fm = CustomAuthenticationForm(request, request.POST)
-        if fm.is_valid():
-            username = fm.cleaned_data['username']
-            password = fm.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                return redirect('home') 
-    else:
-        fm = CustomAuthenticationForm()
-    return render(request, 'doctor/login.html', {
-        'page_title': 'Doctor Login',
-        'form': fm,
-    })
-
-#Doctor Logout
-def doctor_logout(request):
-    logout(request)
-    return redirect('doctor_login') 
-
-#Reset Password
-def doctor_change_password(request):
-    if not request.user.is_authenticated:
-        return redirect('doctor_login')
-    if request.method == 'POST':
-        fm = CustomPasswordChangeForm(user=request.user, data=request.POST)
-        if fm.is_valid():
-            fm.save()
-            update_session_auth_hash(request, fm.user)
-            messages.success(request, "Password has been changed.")
-    else:
-        fm = CustomPasswordChangeForm(user=request.user)
-    return render(request, 'doctor/change-password.html', {
-        'page_title': 'Change Password',
-        'form': fm,
-    })
-
 def n_patients(request):
     # Fetch patients with a past visit date
     patients = Patient.objects.filter(visit_date__lt=date.today())
@@ -251,4 +209,46 @@ def reports(request):
         'months': monthName,
         'curr_year': selectedYear,
         'curr_month': calendar.month_name[selectedMonth],
+    })
+
+#Doctor Login
+def doctor_login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        fm = CustomAuthenticationForm(request, request.POST)
+        if fm.is_valid():
+            username = fm.cleaned_data['username']
+            password = fm.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('home') 
+    else:
+        fm = CustomAuthenticationForm()
+    return render(request, 'auth/login.html', {
+        'page_title': 'Doctor Login',
+        'form': fm,
+    })
+
+#Doctor Logout
+def doctor_logout(request):
+    logout(request)
+    return redirect('doctor_login') 
+
+#Reset Password
+def doctor_change_password(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if request.method == 'POST':
+        fm = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if fm.is_valid():
+            fm.save()
+            update_session_auth_hash(request, fm.user)
+            messages.success(request, "Password has been changed.")
+    else:
+        fm = CustomPasswordChangeForm(user=request.user)
+    return render(request, 'auth/change-password.html', {
+        'page_title': 'Change Password',
+        'form': fm,
     })
