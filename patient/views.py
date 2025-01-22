@@ -209,11 +209,9 @@ def reports(request):
         selectedMonth = int(request.GET.get('month'))
     else:
         selectedMonth = date.today().month
-    print(selectedYear, selectedMonth)
 
     # Chart By Date
     dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Count('id'))
-    print(dPatients)
     dailyChartLabels, dailyChartValues = [], []
     for data in dPatients:
         dailyChartLabels.append(data['visit_date'].strftime('%d-%m-%y'))
