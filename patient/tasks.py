@@ -21,7 +21,7 @@ def send_next_visit_email_notification():
                 'next_visit': next_visit_date,
                 'name': patient.name,
             }
-            email_body = render_to_string('doctor/email-template.html', context)
+            email_body = render_to_string('email/email-template.html', context)
 
             # Send email
             email = EmailMessage(

@@ -120,7 +120,7 @@ def n_patients(request):
                 'next_visit': next_visit_date,
                 'name': patient.name,
             }
-            email_body = render_to_string('doctor/email-template.html', context)
+            email_body = render_to_string('email/email-template.html', context)
 
             # Send email
             email = EmailMessage(
@@ -139,7 +139,7 @@ def n_patients(request):
                 print(f"Failed to send email to {patient.email}: {e}")
 
     # Render the count in the template
-    return render(request, 'doctor/n_patients.html', {
+    return render(request, 'email/n_patients.html', {
         'count': count,
     })
 
