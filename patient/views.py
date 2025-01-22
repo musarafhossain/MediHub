@@ -1,16 +1,21 @@
+#Django Imports
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm
 from django.contrib import messages
-from .models import Patient
-from datetime import date, timedelta
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db.models import Count
+
+#Local Imports
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm
+from .models import Patient
+
+#Python Imports
+from datetime import date, timedelta
 import calendar
 
-# Create your views here.
+# Home view
 def home(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
@@ -39,7 +44,7 @@ def doctor_quick_add_patient(request):
             messages.warning(request, "Something went wrong!!")
     else:
         fm = QuickPatientForm()
-    return render(request, 'doctor/quick-add-patient.html', {
+    return render(request, 'doctor/add-patient.html', {
         'page_title': 'Quick Add Patient',
         'form': fm,
         'heading':'Quick Add Patient',
@@ -68,7 +73,7 @@ def add_patients(request):
             messages.warning(request, "Something went wrong!!")
     else:
         fm = PatientForm()
-    return render(request, 'doctor/quick-add-patient.html', {
+    return render(request, 'doctor/add-patient.html', {
         'page_title': 'Add Patient',
         'form': fm,
         'heading':'Add Patient',
@@ -90,7 +95,7 @@ def update_patients(request, id):
             redirect('update-patients', id)
         else:
             fm = PatientForm(instance=patient)
-        return render(request, 'doctor/quick-add-patient.html', {
+        return render(request, 'doctor/add-patient.html', {
             'page_title': 'Update Patient',
             'form': fm,
             'heading':'Update Patient',
@@ -105,44 +110,7 @@ def delete_patients(request, id):
         patient.delete()
     return redirect('all-patients')
 
-def n_patients(request):
-    # Fetch patients with a past visit date
-    patients = Patient.objects.filter(visit_date__lt=date.today())
-    count = 0
-
-    for patient in patients:
-        next_visit_date = patient.visit_date + timedelta(days=patient.next_visit)
-        notification_date = next_visit_date - timedelta(days=1)
-        if notification_date == date.today():
-            # Prepare email content
-            subject = 'Doctor Next Visit'
-            context = {
-                'next_visit': next_visit_date,
-                'name': patient.name,
-            }
-            email_body = render_to_string('email/email-template.html', context)
-
-            # Send email
-            email = EmailMessage(
-                subject=subject,
-                body=email_body,
-                from_email=settings.EMAIL_HOST_USER,
-                to=[patient.email],
-            )
-            email.content_subtype = "html"  # Specify HTML content
-
-            try:
-                email.send()
-                count += 1  # Increment count only if email sent successfully
-            except Exception as e:
-                # Log the error (optional, depending on your logging setup)
-                print(f"Failed to send email to {patient.email}: {e}")
-
-    # Render the count in the template
-    return render(request, 'email/n_patients.html', {
-        'count': count,
-    })
-
+#Reports View
 def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
@@ -209,6 +177,45 @@ def reports(request):
         'months': monthName,
         'curr_year': selectedYear,
         'curr_month': calendar.month_name[selectedMonth],
+    })
+
+#Send Email Notification for debug
+def n_patients(request):
+    # Fetch patients with a past visit date
+    patients = Patient.objects.filter(visit_date__lt=date.today())
+    count = 0
+
+    for patient in patients:
+        next_visit_date = patient.visit_date + timedelta(days=patient.next_visit)
+        notification_date = next_visit_date - timedelta(days=1)
+        if notification_date == date.today():
+            # Prepare email content
+            subject = 'Doctor Next Visit'
+            context = {
+                'next_visit': next_visit_date,
+                'name': patient.name,
+            }
+            email_body = render_to_string('email/email-template.html', context)
+
+            # Send email
+            email = EmailMessage(
+                subject=subject,
+                body=email_body,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[patient.email],
+            )
+            email.content_subtype = "html"  # Specify HTML content
+
+            try:
+                email.send()
+                count += 1  # Increment count only if email sent successfully
+            except Exception as e:
+                # Log the error (optional, depending on your logging setup)
+                print(f"Failed to send email to {patient.email}: {e}")
+
+    # Render the count in the template
+    return render(request, 'email/n_patients.html', {
+        'count': count,
     })
 
 #Doctor Login
