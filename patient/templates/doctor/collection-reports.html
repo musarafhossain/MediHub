@@ -2,7 +2,7 @@
 {% block main %}
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <div class="card" data-aos="fade-left" data-aos-offset="10" data-aos-easing="linear" data-aos-duration="500">
-        <h4 class="card-header">Reports</h4>
+        <h4 class="card-header">Collection Reports (RS.)</h4>
         <div class="card-body">
             <div class="row">
               <form action="" method="get" class="row">
@@ -71,7 +71,7 @@
     <script>
         var dailyOptions = {
           series: [{
-            name: "Patients",
+            name: "Amount (RS.)",
             data: {{ dailyChart.dailyChartValues|safe }}
         }],
           chart: {
@@ -107,7 +107,7 @@
 
         var monthlyOptions = {
           series: [{
-            name: "Patients",
+            name: "Amount (RS.)",
             data: {{ monthlyChart.monthlyChartValues|safe }}
         }],
           chart: {
@@ -143,7 +143,7 @@
         
         var yearlyOptions = {
           series: [{
-            name: "Patients",
+            name: "Amount (RS.)",
             data: {{ yearlyChart.yearlyChartValues|safe }}
         }],
           chart: {

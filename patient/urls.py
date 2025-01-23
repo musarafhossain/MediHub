@@ -17,6 +17,8 @@ urlpatterns = [
     path('patients/delete/<int:id>', views.delete_patients, name='delete-patients'),
     # Reports [Daily, Monthly, Yearly]
     path('reports/', views.reports, name='reports'),
+    # Collection Reports [Daily, Monthly, Yearly]
+    path('collection-report/', views.collection_reports, name='collection_reports'),
     # Authentication [Login, Logout, Reset Password]
     path('doctor/login/', views.doctor_login, name='doctor_login'),
     path('doctor/logout/', views.doctor_logout, name='doctor_logout'),
