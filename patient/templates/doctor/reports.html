@@ -27,7 +27,7 @@
                             <select name="year" class="mb-3 form-control">
                                 <option disabled>--- Select Year ---</option>
                                   {% for year in years %}
-                                    <option {% if year.visit_date__year == curr_year %} selected {% endif %} >{{year.visit_date__year}}</option>
+                                    <option {% if year.added_time__year == curr_year %} selected {% endif %} >{{year.added_time__year}}</option>
                                   {% endfor %}
                             </select>
                         </div>

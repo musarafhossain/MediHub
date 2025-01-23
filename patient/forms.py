@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from .models import Patient
+from .models import Patient, Visit
 
 class CustomAuthenticationForm(AuthenticationForm):
     # Override the error messages for invalid login and inactive account
@@ -43,13 +43,13 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         })
 
 class QuickPatientForm(forms.ModelForm):
+    detail=forms.CharField(widget=forms.Textarea(attrs={'rows': '5'}))
+    medicine_detail=forms.CharField(widget=forms.Textarea(attrs={'rows': '5'}))
+    amount=forms.DecimalField(decimal_places=2, initial=0.0)
+    next_visit=forms.IntegerField(initial=0)
     class Meta:
         model = Patient
-        fields = ['name', 'email', 'age', 'gender', 'detail', 'medicine_detail', 'amount', 'next_visit']
-        widgets = {
-            'detail': forms.Textarea(attrs={'rows': '5'}),
-            'medicine_detail': forms.Textarea(attrs={'rows': '5'}),
-        }
+        fields = ['name', 'email', 'age', 'gender']
 
 class PatientForm(forms.ModelForm):
     class Meta:
@@ -57,15 +57,14 @@ class PatientForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'address': forms.Textarea(attrs={'rows': '5'}),
+        }
+
+class VisitForm(forms.ModelForm):
+    class Meta:
+        model = Visit
+        fields = ['detail', 'medicine_detail', 'amount', 'next_visit', 'note']
+        widgets = {
             'detail': forms.Textarea(attrs={'rows': '5'}),
             'medicine_detail': forms.Textarea(attrs={'rows': '5'}),
             'note': forms.Textarea(attrs={'rows': '5'}),
         }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            if isinstance(field, forms.CharField):
-                field.initial = 'Default value'
-            elif isinstance(field, forms.IntegerField):
-                field.initial = 0

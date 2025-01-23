@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import date
 from django.utils.timezone import now
 
 GENDER_CHOICES = (
@@ -15,11 +14,15 @@ class Patient(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, default='Male', max_length=10)
     age = models.IntegerField(default=0)
     mobile = models.IntegerField(null=True)
-    next_visit = models.IntegerField(default=0)
     address = models.TextField(null=True)
+    added_time = models.DateField(auto_now_add=True, null=True)
+
+class Visit(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     detail = models.TextField(null=True)
     medicine_detail = models.TextField(null=True)
-    note = models.TextField(null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    amount = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
+    next_visit = models.IntegerField(default=0)
     visit_date = models.DateField(default=now, null=True)
-    added_time = models.DateTimeField(auto_now_add=True, null=True)
+    note = models.TextField(null=True)
+    

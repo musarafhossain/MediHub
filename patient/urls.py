@@ -6,19 +6,24 @@ urlpatterns = [
     path('', views.home, name='home'),
     # Doctor Dashboard
     path('doctor/dashboard/', views.doctor_dashbaord, name='doctor_dashboard'),
-    # View all patients
-    path('patients/', views.all_patients, name='all-patients'),
-    # Add patient [Quick, Normal]
-    path('doctor/quick-add-patient/', views.doctor_quick_add_patient, name='quick-add-patient'),
-    path('patients/add', views.add_patients, name='add-patients'),
-    # Update patient
-    path('patients/update/<int:id>', views.update_patients, name='update-patients'),
-    # Delete patient
-    path('patients/delete/<int:id>', views.delete_patients, name='delete-patients'),
-    # Reports [Daily, Monthly, Yearly]
-    path('reports/', views.reports, name='reports'),
-    # Collection Reports [Daily, Monthly, Yearly]
-    path('collection-report/', views.collection_reports, name='collection_reports'),
+    
+    #Patient Details
+    path('patients/', views.all_patients, name='all-patients'),                                 # View all patients
+    path('doctor/quick-add-patient/', views.quick_add_patient, name='quick-add-patient'),       # Quick Add patient
+    path('patients/add', views.add_patients, name='add-patients'),                              # Add patient
+    path('patients/update/<int:id>', views.update_patients, name='update-patients'),            # Update patient
+    path('patients/delete/<int:id>', views.delete_patients, name='delete-patients'),            # Delete patient
+    
+    # Visit Details [of patient]
+    path('patients/all-visit/<int:patient_id>', views.all_visit, name='all-visit'),             # View all visit
+    path('patients/add-visit/<int:patient_id>', views.add_visit, name='add-visit'),             # Add visit
+    path('patients/update-visit/<int:visit_id>', views.update_visit, name='update-visit'),      # Update visit
+    path('patients/delete-visit/<int:visit_id>', views.delete_visit, name='delete-visit'),      # Delete visit
+    
+    # Reports 
+    path('reports/', views.reports, name='reports'),                                            # Patient Reports [Daily, Monthly, Yearly]
+    path('collection-report/', views.collection_reports, name='collection_reports'),            # Collection Reports [Daily, Monthly, Yearly]
+    
     # Authentication [Login, Logout, Reset Password]
     path('doctor/login/', views.doctor_login, name='doctor_login'),
     path('doctor/logout/', views.doctor_logout, name='doctor_logout'),

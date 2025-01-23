@@ -6,10 +6,11 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db.models import Count, Sum
+from django.db import transaction, IntegrityError
 
 #Local Imports
-from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm
-from .models import Patient
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm, VisitForm
+from .models import Patient, Visit
 
 #Python Imports
 from datetime import date, timedelta
@@ -32,15 +33,27 @@ def doctor_dashbaord(request):
     })
 
 #Quick add patient
-def doctor_quick_add_patient(request):
+def quick_add_patient(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     if request.method=='POST':
-        fm = QuickPatientForm(request.POST)
-        if fm.is_valid():
-            fm.save()
-            messages.success(request, "Patient added successfully")
-        else:
+        try:
+            with transaction.atomic():
+                fm = QuickPatientForm(request.POST)
+                if fm.is_valid():
+                    patient = fm.save()
+                    # Add visit details
+                    visit=Visit.objects.create(
+                        patient=patient,
+                        detail=fm.cleaned_data['detail'],
+                        medicine_detail=fm.cleaned_data['medicine_detail'],
+                        amount=fm.cleaned_data['amount'],
+                        next_visit=fm.cleaned_data['next_visit'],
+                    )
+                    messages.success(request, "Patient added successfully")
+                else:
+                    messages.warning(request, "Something went wrong!!")
+        except IntegrityError:
             messages.warning(request, "Something went wrong!!")
     else:
         fm = QuickPatientForm()
@@ -63,18 +76,40 @@ def all_patients(request):
 def add_patients(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
-    if request.method=='POST':
+    
+    if request.method == 'POST':
         fm = PatientForm(request.POST)
-        if fm.is_valid():
-            fm.save()
-            messages.success(request, "Patient added successfully")
+        fm_visit = VisitForm(request.POST)
+
+        if fm.is_valid() and fm_visit.is_valid():
+            try:
+                with transaction.atomic():
+                    # Save patient details
+                    patient = fm.save()
+
+                    # Save visit details
+                    Visit.objects.create(
+                        patient=patient,
+                        detail=fm_visit.cleaned_data['detail'],
+                        medicine_detail=fm_visit.cleaned_data['medicine_detail'],
+                        amount=fm_visit.cleaned_data['amount'],
+                        next_visit=fm_visit.cleaned_data['next_visit'],
+                        note=fm_visit.cleaned_data['note'],
+                    )
+
+                    messages.success(request, "Patient added successfully.")
+            except IntegrityError:
+                messages.error(request, "Database error: Unable to add patient. Please try again.")
         else:
-            messages.warning(request, "Something went wrong!!")
+            messages.warning(request, "Please correct the errors below.")
     else:
         fm = PatientForm()
+        fm_visit = VisitForm()
+
     return render(request, 'doctor/add-patient.html', {
         'page_title': 'Add Patient',
         'form': fm,
+        'form_visit': fm_visit,
     })
 
 #Update patient
@@ -93,6 +128,9 @@ def update_patients(request, id):
             redirect('update-patients', id)
         else:
             fm = PatientForm(instance=patient)
+            for field_name in ['detail', 'medicine_detail', 'amount', 'next_visit', 'note']:
+                if field_name in fm.fields:
+                    del fm.fields[field_name]
         return render(request, 'doctor/add-patient.html', {
             'page_title': 'Update Patient',
             'form': fm,
@@ -107,26 +145,96 @@ def delete_patients(request, id):
         patient.delete()
     return redirect('all-patients')
 
+#View all visit
+def all_visit(request, patient_id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    data = Visit.objects.filter(patient_id=patient_id).order_by('-id')
+    return render(request, 'doctor/all-visit.html', {
+        'data': data,
+        'page_title': 'All Visits',
+        'patient_id': patient_id,
+    })
+
+#Add Visit
+def add_visit(request, patient_id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if request.method=='POST':
+        patient=Patient.objects.get(id=patient_id)
+        fm = VisitForm(request.POST)
+        if fm.is_valid():
+            Visit.objects.create(
+                patient=patient,
+                detail=fm.cleaned_data['detail'],
+                medicine_detail=fm.cleaned_data['medicine_detail'],
+                amount=fm.cleaned_data['amount'],
+                next_visit=fm.cleaned_data['next_visit'],
+                note=fm.cleaned_data['note'],
+            )
+            messages.success(request, "Visit added successfully")
+        else:
+            messages.warning(request, "Something went wrong!!")
+        return redirect('add-visit', patient_id)
+    else:
+        fm = VisitForm()
+    return render(request, 'doctor/add-patient.html', {
+        'page_title': 'Add Visit',
+        'form': fm,
+    })
+
+#Update Visit
+def update_visit(request, visit_id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if visit_id is not None:
+        visit = Visit.objects.get(id=visit_id)
+        if request.method=='POST':
+            fm = VisitForm(request.POST, instance=visit)
+            if fm.is_valid():
+                fm.save()
+                messages.success(request, "Visit added successfully")
+            else:
+                messages.warning(request, "Something went wrong!!")
+            return redirect('update-visit', visit_id)
+        else:
+            fm = VisitForm(instance=visit)
+        return render(request, 'doctor/add-patient.html', {
+            'page_title': 'Update Visit',
+            'form': fm,
+        })
+
+#Delete Visit
+def delete_visit(request, visit_id):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if id is not None:
+        visit = Visit.objects.get(id=visit_id)
+        patient_id = visit.patient.id
+        visit.delete()
+        print("Delete", patient_id)
+        return redirect('all-visit', patient_id)
+
 #Toatl Patient Reports View
 def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
     
     # Get all Year
-    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    years = Patient.objects.values('added_time__year').annotate(total=Count('id'))
     selectedYear = date.today().year
     if request.GET.get('year'):
         selectedYear = int(request.GET.get('year'))
     else:
         if years:
-            year_values = [year['visit_date__year'] for year in years]
+            year_values = [year['added_time__year'] for year in years]
             selectedYear = date.today().year if date.today().year in year_values else year_values[0]
 
     # Get all Month
-    months = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
+    months = Patient.objects.filter(added_time__year=selectedYear).values('added_time__month').annotate(total=Count('id'))
     monthName = [{
-        'name': calendar.month_name[month['visit_date__month']],
-        'number': month['visit_date__month'] 
+        'name': calendar.month_name[month['added_time__month']],
+        'number': month['added_time__month'] 
     } for month in months]
 
     if request.GET.get('month'):
@@ -139,21 +247,21 @@ def reports(request):
     yearChartLabels, yearChartValues = [], []
     # Chart By Month
     if request.GET.get('chart_type')=='monthly':
-        mPatients = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
+        mPatients = Patient.objects.filter(added_time__year=selectedYear).values('added_time__month').annotate(total=Count('id'))
         for data in mPatients:
-            monthChartLabels.append(calendar.month_name[data['visit_date__month']])
+            monthChartLabels.append(calendar.month_name[data['added_time__month']])
             monthChartValues.append(data['total'])
     # Chart By Year
     elif request.GET.get('chart_type')=='yearly':
-        yPatients = Patient.objects.filter().values('visit_date__year').annotate(total=Count('id'))
+        yPatients = Patient.objects.filter().values('added_time__year').annotate(total=Count('id'))
         for data in yPatients:
-            yearChartLabels.append(data['visit_date__year'])
+            yearChartLabels.append(data['added_time__year'])
             yearChartValues.append(data['total'])
     # Chart By Date
     else:
-        dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Count('id'))
+        dPatients = Patient.objects.filter(added_time__year=selectedYear, added_time__month=selectedMonth).values('added_time').annotate(total=Count('id'))
         for data in dPatients:
-            dailyChartLabels.append(data['visit_date'].strftime('%d-%m-%y'))
+            dailyChartLabels.append(data['added_time'].strftime('%d-%m-%y'))
             dailyChartValues.append(data['total'])
 
     return render(request, 'doctor/reports.html', {
@@ -182,7 +290,7 @@ def collection_reports(request):
         return redirect('doctor_login')
     
     # Get all Year
-    years = Patient.objects.values('visit_date__year').annotate(total=Count('id'))
+    years = Visit.objects.values('visit_date__year').annotate(total=Count('id'))
     selectedYear = date.today().year
     if request.GET.get('year'):
         selectedYear = int(request.GET.get('year'))
@@ -192,7 +300,7 @@ def collection_reports(request):
             selectedYear = date.today().year if date.today().year in year_values else year_values[0]
 
     # Get all Month
-    months = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
+    months = Visit.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Count('id'))
     monthName = [{
         'name': calendar.month_name[month['visit_date__month']],
         'number': month['visit_date__month'] 
@@ -208,19 +316,19 @@ def collection_reports(request):
     yearChartLabels, yearChartValues = [], []
     # Chart By Month
     if request.GET.get('chart_type')=='monthly':
-        mPatients = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Sum('amount'))
+        mPatients = Visit.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Sum('amount'))
         for data in mPatients:
             monthChartLabels.append(calendar.month_name[data['visit_date__month']])
             monthChartValues.append(float(data['total']))
     # Chart By Year
     elif request.GET.get('chart_type')=='yearly':
-        yPatients = Patient.objects.filter().values('visit_date__year').annotate(total=Sum('amount'))
+        yPatients = Visit.objects.filter().values('visit_date__year').annotate(total=Sum('amount'))
         for data in yPatients:
             yearChartLabels.append(data['visit_date__year'])
             yearChartValues.append(float(data['total']))
     # Chart By Date
     else:
-        dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Sum('amount'))
+        dPatients = Visit.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Sum('amount'))
         for data in dPatients:
             dailyChartLabels.append(data['visit_date'].strftime('%d-%m-%y'))
             dailyChartValues.append(float(data['total']))

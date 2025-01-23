@@ -36,9 +36,31 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    {% for field in form_visit %}
+                        <tr>
+                            <th>
+                                {{field.label_tag}}
+                                {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </th>
+                            <td>
+                                {% if field.errors %}
+                                    {{ field|add_class:"form-control is-invalid" }}
+                                {% else %}
+                                    {{ field|add_class:"form-control" }}
+                                {% endif %}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     <tr>
                         <td colspan="2">
-                            <input type="submit" class="btn btn-sm btn-success" value="{{heading}}">
+                            <input type="submit" class="btn btn-sm btn-success" value="{{page_title}}">
                         </td>
                     </tr>
                 </table>

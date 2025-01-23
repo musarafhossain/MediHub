@@ -13,13 +13,12 @@
                         <tr>
                             <th>SN.</th>
                             <th>Name</th>
+                            <th>Visits</th>
                             <th>Email</th>
-                            <th>Date</th>
+                            <th>Mobile</th>
+                            <th>Added Date</th>
                             <th>Age</th>
                             <th>Gender</th>
-                            <th>Detail</th>
-                            <th>Medicine</th>
-                            <th>Amount</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -29,13 +28,16 @@
                                 <tr title="{{row.name}}[{{row.mobile}}]" class="cursor-pointer">
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ row.name }}</td>
+                                    <td>
+                                        <a href="{% url 'all-visit' row.id %}" class="btn btn-primary btn-sm" title="Update">
+                                            Show Visits
+                                        </a>
+                                    </td>
                                     <td>{{ row.email }}</td>
-                                    <td>{{ row.visit_date|date:'d-m-Y' }}</td>
+                                    <td>{{ row.mobile }}</td>
+                                    <td>{{ row.added_time|date:'d-m-Y' }}</td>
                                     <td>{{ row.age }}</td>
                                     <td>{{ row.gender }}</td>
-                                    <td>{{ row.detail }}</td>
-                                    <td>{{ row.medicine_detail }}</td>
-                                    <td>{{ row.amount }}</td>
                                     <td>
                                         <a href="{% url 'update-patients' row.id %}" class="text-info" title="Update">
                                             <i class="fa-solid fa-pen-to-square"></i>
