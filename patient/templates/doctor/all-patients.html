@@ -3,7 +3,7 @@
 {% block main %}
     <div class="card" data-aos="fade-left" data-aos-offset="10" data-aos-easing="linear" data-aos-duration="500">
         <h4 class="card-header">
-            All Patients ({{data.count}})
+            {{page_title}} ({{data.count}})
             <a href="{% url 'add-patients' %}" class="float-end btn btn-sm btn-success"><i class="fa-solid fa-plus"></i>Add Patients</a>
         </h4>
         <div class="card-body">

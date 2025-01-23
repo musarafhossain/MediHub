@@ -47,7 +47,6 @@ def doctor_quick_add_patient(request):
     return render(request, 'doctor/add-patient.html', {
         'page_title': 'Quick Add Patient',
         'form': fm,
-        'heading':'Quick Add Patient',
     })
 
 #View all patient
@@ -76,7 +75,6 @@ def add_patients(request):
     return render(request, 'doctor/add-patient.html', {
         'page_title': 'Add Patient',
         'form': fm,
-        'heading':'Add Patient',
     })
 
 #Update patient
@@ -98,7 +96,6 @@ def update_patients(request, id):
         return render(request, 'doctor/add-patient.html', {
             'page_title': 'Update Patient',
             'form': fm,
-            'heading':'Update Patient',
         })
 
 #Delete patient
@@ -110,7 +107,7 @@ def delete_patients(request, id):
         patient.delete()
     return redirect('all-patients')
 
-#Reports View
+#Toatl Patient Reports View
 def reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
@@ -160,7 +157,7 @@ def reports(request):
             dailyChartValues.append(data['total'])
 
     return render(request, 'doctor/reports.html', {
-        'page_title': 'Reports',
+        'page_title': 'Total Patient Reports',
         'dailyChart': {
             'dailyChartLabels': dailyChartLabels,
             'dailyChartValues': dailyChartValues,
@@ -179,6 +176,7 @@ def reports(request):
         'curr_month': calendar.month_name[selectedMonth],
     })
 
+#Collection Reports View
 def collection_reports(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
@@ -228,7 +226,7 @@ def collection_reports(request):
             dailyChartValues.append(float(data['total']))
 
     return render(request, 'doctor/collection-reports.html', {
-        'page_title': 'Reports',
+        'page_title': 'Collection Reports',
         'dailyChart': {
             'dailyChartLabels': dailyChartLabels,
             'dailyChartValues': dailyChartValues,
