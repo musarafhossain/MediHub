@@ -213,19 +213,19 @@ def collection_reports(request):
         mPatients = Patient.objects.filter(visit_date__year=selectedYear).values('visit_date__month').annotate(total=Sum('amount'))
         for data in mPatients:
             monthChartLabels.append(calendar.month_name[data['visit_date__month']])
-            monthChartValues.append(data['total'])
+            monthChartValues.append(float(data['total']))
     # Chart By Year
     elif request.GET.get('chart_type')=='yearly':
         yPatients = Patient.objects.filter().values('visit_date__year').annotate(total=Sum('amount'))
         for data in yPatients:
             yearChartLabels.append(data['visit_date__year'])
-            yearChartValues.append(data['total'])
+            yearChartValues.append(float(data['total']))
     # Chart By Date
     else:
         dPatients = Patient.objects.filter(visit_date__year=selectedYear, visit_date__month=selectedMonth).values('visit_date').annotate(total=Sum('amount'))
         for data in dPatients:
             dailyChartLabels.append(data['visit_date'].strftime('%d-%m-%y'))
-            dailyChartValues.append(data['total'])
+            dailyChartValues.append(float(data['total']))
 
     return render(request, 'doctor/collection-reports.html', {
         'page_title': 'Reports',
