@@ -30,8 +30,12 @@ def home(request):
 def doctor_dashbaord(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
+    total_patients = Patient.objects.count()
+    total_collection = Visit.objects.aggregate(total=Sum('amount'))
     return render(request, 'doctor/dashboard.html', {
         'page_title': 'Dashboard',
+        'total_patients': total_patients,
+        'total_collection': total_collection,
     })
 
 #Quick add patient
@@ -441,7 +445,7 @@ def doctor_change_password(request):
 def profile_view(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
-    return render(request, 'doctor/profile.html', {
+    return render(request, 'auth/profile.html', {
         'user': request.user,
         'page_title': 'Profile',
     })
