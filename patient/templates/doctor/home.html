@@ -1,8 +1,112 @@
 {% extends 'root_layout.html' %}
+
 {% block content %}
-  <h1>This is from the home page.</h1>
-  {% if request.user.is_authenticated %}
-    <a href="{% url 'doctor_logout' %}">Logout</a>
-    <a href="{% url 'doctor_change_password' %}" class='btn btn-primary btn-sm'>Reset Password</a>
-  {% endif %}
+{% load static %}
+<!-- Hero Section with Carousel -->
+<section class="hero bg-transparent text-black text-center py-5">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active" style="background-image: url('{% static "images/c2.jpg" %}'); background-size: cover; background-position: center; height: 500px;" data-aos="fade-up">
+                <div class="container d-flex flex-column justify-content-center align-items-center h-100">
+                    <h1 class="display-3 fw-bold">Welcome to MediHub</h1>
+                    <p class="lead">Your trusted platform for healthcare management.</p>
+                    <a href="#services" class="btn btn-light btn-lg">Learn More</a>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item" style="background-image: url('{% static "images/c1.jpg" %}'); background-size: cover; background-position: center; height: 500px;" data-aos="fade-up">
+                <div class="container d-flex flex-column justify-content-center align-items-center h-100">
+                    <h1 class="display-3 fw-bold">Access Healthcare Anytime</h1>
+                    <p class="lead">Connect with doctors remotely, from anywhere.</p>
+                    <a href="#services" class="btn btn-light btn-lg">Learn More</a>
+                </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item" style="background-image: url('{% static "images/c2.jpg" %}'); background-size: cover; background-position: center; height: 500px;" data-aos="fade-up">
+                <div class="container d-flex flex-column justify-content-center align-items-center h-100">
+                    <h1 class="display-3 fw-bold">Manage Your Health Records</h1>
+                    <p class="lead">Easily track and manage all your health information.</p>
+                    <a href="#services" class="btn btn-light btn-lg">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+<!-- About Us Section -->
+<section id="about-us" class="py-5 text-center bg-light" data-aos="fade-up">
+    <div class="container">
+        <h2 class="fw-bold mb-4">About Us</h2>
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <p class="lead text-center">
+                    MediHub connects healthcare providers and patients to improve the quality of care. We leverage technology to simplify and enhance the healthcare experience for everyone.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'images/about-us.jpg' %}" class="img-fluid rounded" alt="About Us" data-aos="zoom-in">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Services Section -->
+<section id="services" class="py-5 text-center" data-aos="fade-up">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Our Services</h2>
+        <div class="row">
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm w-100">
+                    <img src="{% static 'images/service1.jpg' %}" class="card-img-top" alt="Service 1" data-aos="flip-left">
+                    <div class="card-body">
+                        <h5 class="card-title">Healthcare Management</h5>
+                        <p class="card-text">Efficient management of patient data, schedules, and more for healthcare providers.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm w-100">
+                    <img src="{% static 'images/service2.jpg' %}" class="card-img-top" alt="Service 2" data-aos="flip-left">
+                    <div class="card-body">
+                        <h5 class="card-title">Telemedicine</h5>
+                        <p class="card-text">Consult doctors remotely through our easy-to-use telemedicine platform.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm w-100">
+                    <img src="{% static 'images/service3.jpg' %}" class="card-img-top" alt="Service 3" data-aos="flip-left">
+                    <div class="card-body">
+                        <h5 class="card-title">Online Appointment Booking</h5>
+                        <p class="card-text">Book appointments with healthcare professionals directly through our platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact Section -->
+<section id="contact" class="py-5 bg-dark text-white text-center" data-aos="fade-up">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Contact Us</h2>
+        <p class="lead">Have any questions? Reach out to us and we'll be happy to help!</p>
+        <a href="mailto:info@medi-hub.com" class="btn btn-light btn-lg">Email Us</a>
+    </div>
+</section>
+
 {% endblock %}
