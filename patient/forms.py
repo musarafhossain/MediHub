@@ -31,15 +31,12 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         # Manually applying custom widgets and placeholder values
         self.fields['old_password'].widget = forms.PasswordInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Enter your old password'
         })
         self.fields['new_password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Enter your new password'
         })
         self.fields['new_password2'].widget = forms.PasswordInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Confirm your new password'
         })
 
 class QuickPatientForm(forms.ModelForm):

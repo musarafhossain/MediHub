@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
   <div class="container-fluid">
     <!-- MediHub Logo -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <i class="fa-solid fa-hospital fa-xl text-white me-2"></i> <!-- MediHub Icon -->
       <span class="text-white fw-bold">MediHub</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,13 +11,26 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <!-- Centered Navigation Links -->
       <div class="navbar-nav mx-auto">
-        <a class="nav-link text-white" aria-current="page" href="{% url 'home' %}">Home</a>
-        <a class="nav-link text-white" href="{% url 'doctor_dashboard' %}">Dashboard</a>
-        <a class="nav-link text-white" href="#">About Us</a>
-        <a class="nav-link text-white" href="#">Contact Us</a>
+        <a class="nav-link text-white d-flex align-items-center" aria-current="page" href="{% url 'home' %}">
+          <i class="fa-solid fa-house me-2"></i>Home
+        </a>
+        <a class="nav-link text-white d-flex align-items-center" href="{% url 'doctor_dashboard' %}">
+          <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+        </a>
+        <a class="nav-link text-white d-flex align-items-center" href="{% url 'doctor_profile' %}">
+          <i class="fa-solid fa-user me-2"></i>Profile
+        </a>
       </div>
       <!-- Logout Button on the Right -->
-      <a class="btn btn-danger text-white" href="#" role="button">Logout</a>
+      {% if request.user.is_authenticated %}
+        <a class="btn btn-danger d-flex align-items-center text-white" href="{% url 'doctor_logout' %}" role="button">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+        </a>
+      {% else %}
+        <a class="btn btn-dark d-flex align-items-center text-white" href="{% url 'doctor_login' %}" role="button">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Login
+        </a>
+      {% endif %}
     </div>
   </div>
 </nav>

@@ -1,6 +1,7 @@
 #Django Imports
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -434,4 +435,13 @@ def doctor_change_password(request):
     return render(request, 'auth/change-password.html', {
         'page_title': 'Change Password',
         'form': fm,
+    })
+
+#Profile
+def profile_view(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    return render(request, 'doctor/profile.html', {
+        'user': request.user,
+        'page_title': 'Profile',
     })

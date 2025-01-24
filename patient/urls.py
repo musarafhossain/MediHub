@@ -24,10 +24,12 @@ urlpatterns = [
     path('reports/', views.reports, name='reports'),                                            # Patient Reports [Daily, Monthly, Yearly]
     path('collection-report/', views.collection_reports, name='collection_reports'),            # Collection Reports [Daily, Monthly, Yearly]
     
-    # Authentication [Login, Logout, Reset Password]
+    # Authentication [Login, Logout, Reset Password, Profile]
     path('doctor/login/', views.doctor_login, name='doctor_login'),
     path('doctor/logout/', views.doctor_logout, name='doctor_logout'),
     path('doctor/reset-password/', views.doctor_change_password, name='doctor_change_password'),
+    path('doctor/profile/', views.profile_view, name='doctor_profile'),
+    
     # Email
     path('email/', views.n_patients, name='email'),
 ]
