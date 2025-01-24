@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.models import User
 from .models import Patient, Visit
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -38,6 +39,13 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         self.fields['new_password2'].widget = forms.PasswordInput(attrs={
             'class': 'form-control', 
         })
+
+class CustomUserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'profile_picture']  # Add more fields as needed
+
+    profile_picture = forms.ImageField(required=False)
 
 class QuickPatientForm(forms.ModelForm):
     detail=forms.CharField(widget=forms.Textarea(attrs={'rows': '5'}))

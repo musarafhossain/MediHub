@@ -1,47 +1,47 @@
 {% extends 'layout.html' %}
 
 {% block main %}
-<div class="container">
-    <h2 class="fw-bold mb-4">Edit Profile</h2>
-    
-    <!-- Edit Profile Form -->
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+    <div class="card shadow-sm border-0 p-4" data-aos="fade-up">
+        <h2 class="card-header fw-bold mb-4">Edit Profile</h2>
         
-        <!-- First Name -->
-        <div class="mb-3">
-            <label for="first_name" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
-        </div>
+        <!-- Edit Profile Form -->
+        <form method="POST" enctype="multipart/form-data card-body">
+            {% csrf_token %}
+            
+            <!-- First Name -->
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+            </div>
 
-        <!-- Last Name -->
-        <div class="mb-3">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
-        </div>
+            <!-- Last Name -->
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+            </div>
 
-        <!-- Email -->
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-        </div>
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
 
-        <!-- Profile Picture (Optional) -->
-        <div class="mb-3">
-            <label for="profile_picture" class="form-label">Profile Picture</label>
-            <input type="file" class="form-control" id="profile_picture" name="profile_picture">
-        </div>
+            <!-- Profile Picture (Optional) -->
+            <div class="mb-3">
+                <label for="profile_picture" class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" id="profile_picture" name="profile_picture">
+            </div>
 
-        <!-- Password Change Section -->
-        <div class="mb-3">
-            <label for="password" class="form-label">New Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep the current password">
-        </div>
+            <!-- Password Change Section -->
+            <div class="mb-3">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep the current password">
+            </div>
 
-        <!-- Submit Button -->
-        <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-    </form>
-</div>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

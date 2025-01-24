@@ -11,7 +11,7 @@ from django.db import transaction, IntegrityError
 from django.db.models import Prefetch
 
 #Local Imports
-from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm, VisitForm
+from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm, VisitForm, CustomUserChangeForm
 from .models import Patient, Visit
 
 #Python Imports
@@ -449,3 +449,17 @@ def profile_view(request):
         'user': request.user,
         'page_title': 'Profile',
     })
+
+#Edit Profile
+def edit_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('doctor_login')
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('doctor_profile')  # Redirect to profile page after saving changes
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    
+    return render(request, 'auth/edit-profile.html', {'form': form})
