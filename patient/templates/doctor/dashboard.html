@@ -1,4 +1,25 @@
 {% extends 'layout.html' %}
 {% block main %}
-    <h1>This is dashboard</h1>
+    <div class="row g-3">
+        <!-- Total Patients Card -->
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary fw-bold">Total Patients</h5>
+                    <hr class="my-3">
+                    <h4 class="display-6 text-dark">117</h4>
+                </div>
+            </div>
+        </div>
+        <!-- Total Collection Card -->
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0" style="background-color: #ffccd5;">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger fw-bold">Total Collection</h5>
+                    <hr class="my-3">
+                    <h4 class="display-6 text-dark">Rs. 5000</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

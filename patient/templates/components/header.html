@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <div class="container-fluid">
+    <!-- MediHub Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <span class="text-white fw-bold">MediHub</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Centered Navigation Links -->
+      <div class="navbar-nav mx-auto">
+        <a class="nav-link text-white" aria-current="page" href="{% url 'home' %}">Home</a>
+        <a class="nav-link text-white" href="{% url 'doctor_dashboard' %}">Dashboard</a>
+        <a class="nav-link text-white" href="#">About Us</a>
+        <a class="nav-link text-white" href="#">Contact Us</a>
+      </div>
+      <!-- Logout Button on the Right -->
+      <a class="btn btn-danger text-white" href="#" role="button">Logout</a>
+    </div>
+  </div>
+</nav>
