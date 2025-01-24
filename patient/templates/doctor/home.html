@@ -3,6 +3,21 @@
 {% block content %}
 {% load static %}
 <!-- Hero Section with Carousel -->
+<style>
+    .carousel-item {
+        position: relative;
+    }
+
+    .carousel-item .container {
+        color: white;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: invert(1); /* Makes the arrows white for better visibility */
+    }
+</style>
 <section class="hero bg-transparent text-black text-center py-5">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
