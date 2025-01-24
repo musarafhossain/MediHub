@@ -10,7 +10,7 @@ GENDER_CHOICES = (
 # Create your models here.
 class Patient(models.Model):
     name = models.CharField(max_length=200)
-    email = models.EmailField(null=True, blank=True)
+    email = models.EmailField(null=True)
     gender = models.CharField(choices=GENDER_CHOICES, default='Male', max_length=10)
     age = models.IntegerField(default=0)
     mobile = models.IntegerField(null=True)
