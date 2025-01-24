@@ -67,12 +67,10 @@ def quick_add_patient(request):
 def all_patients(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
-    #data = Patient.objects.all().order_by('-id')
-    # Fetch all patients with their associated visits
-    patients = Patient.objects.prefetch_related('visit_set').all()
+    data = Patient.objects.all().order_by('-id')
 
     return render(request, 'doctor/all-patients.html', {
-        'data': patients,
+        'data': data,
         'page_title': 'All Patients',
     })
 
