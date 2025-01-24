@@ -1,6 +1,22 @@
 {% extends 'layout.html' %}
 {% load filters %}
 {% block main %}
+    <style>
+        /* Hide the inner table from the browser view */
+        .inner-table {
+            display: none;
+        }
+
+        /* Show the inner table when printing */
+        @media print {
+            .inner-table {
+                display: table;  /* Make the inner table visible when printing */
+            }
+            .v-btn{
+                display: none;
+            }
+        }
+    </style>
     <div class="card" data-aos="fade-left" data-aos-offset="10" data-aos-easing="linear" data-aos-duration="500">
         <h4 class="card-header">
             {{page_title}} ({{data.count}})
@@ -8,13 +24,13 @@
         </h4>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered table-hover text-center">
+                <table class="table table-sm table-bordered table-hover text-center table-striped text-nowrap" id="data-table">
                     <thead>
                         <tr>
                             <th>SN.</th>
                             <th>Name</th>
                             <th>Visits</th>
-                            <th>Email</th>
+                            {% comment %} <th>Email</th> {% endcomment %}
                             <th>Mobile</th>
                             <th>Added Date</th>
                             <th>Age</th>
@@ -29,11 +45,27 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ row.name }}</td>
                                     <td>
-                                        <a href="{% url 'all-visit' row.id %}" class="btn btn-primary btn-sm" title="Update">
+                                        <a href="{% url 'all-visit' row.id %}" class="btn btn-primary btn-sm v-btn" title="Show Visits">
                                             Show Visits
                                         </a>
+                                        <table class="table table-sm table-bordered table-hover text-center table-striped text-nowrap inner-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Visit Date</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for visit in row.visit_set.all %}
+                                                    <tr>
+                                                        <td>{{ visit.visit_date|date:'d-m-Y' }}</td>
+                                                        <td>{{ visit.detail }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </td>
-                                    <td>{{ row.email }}</td>
+                                    {% comment %} <td>{{ row.email }}</td> {% endcomment %}
                                     <td>{{ row.mobile }}</td>
                                     <td>{{ row.added_time|date:'d-m-Y' }}</td>
                                     <td>{{ row.age }}</td>
@@ -58,4 +90,34 @@
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+
+    <!-- JSZip for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- PDFMake for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <!-- Buttons for export and print -->
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js"></script>
+    <script>
+        new DataTable('#data-table', {
+            layout: {
+                topStart: {
+                    buttons: ['print']
+                }
+            }
+        });
+    </script>
 {% endblock %}

@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db.models import Count, Sum
 from django.db import transaction, IntegrityError
+from django.db.models import Prefetch
 
 #Local Imports
 from .forms import CustomAuthenticationForm, CustomPasswordChangeForm, QuickPatientForm, PatientForm, VisitForm
@@ -66,9 +67,12 @@ def quick_add_patient(request):
 def all_patients(request):
     if not request.user.is_authenticated:
         return redirect('doctor_login')
-    data = Patient.objects.all().order_by('-id')
+    #data = Patient.objects.all().order_by('-id')
+    # Fetch all patients with their associated visits
+    patients = Patient.objects.prefetch_related('visit_set').all()
+
     return render(request, 'doctor/all-patients.html', {
-        'data': data,
+        'data': patients,
         'page_title': 'All Patients',
     })
 
