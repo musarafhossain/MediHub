@@ -97,6 +97,14 @@
             opacity: 0.5
           },
         },
+        yaxis: {
+          min: 250,
+          labels: {
+            formatter: function (value) {
+              return value;
+            },
+          },
+        },
         xaxis: {
           categories: {{ dailyChart.dailyChartLabels|safe }},
         }
@@ -133,6 +141,14 @@
             opacity: 0.5
           },
         },
+        yaxis: {
+          min: 250,
+          labels: {
+            formatter: function (value) {
+              return value;
+            },
+          },
+        },
         xaxis: {
           categories: {{ monthlyChart.monthlyChartLabels|safe }},
         }
@@ -167,6 +183,14 @@
           row: {
             colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
             opacity: 0.5
+          },
+        },
+        yaxis: {
+          min: 250,
+          labels: {
+            formatter: function (value) {
+              return value;
+            },
           },
         },
         xaxis: {
