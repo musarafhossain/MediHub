@@ -19,7 +19,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title text-danger fw-bold">Total Collection</h5>
                     <hr class="my-3">
-                    <h4 class="display-6 text-dark">Rs. {{total_collection.total}}</h4>
+                    <h4 class="display-6 text-dark">Rs. {{ total_collection.total|default:0 }}</h4>
                 </div>
             </div>
         </div>
