@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from django.contrib.messages import constants
 import pymysql
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pymysql.install_as_MySQLdb()
 
@@ -81,14 +84,15 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Database using Dockerized MySQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'medihub',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # or your DB host, like '127.0.0.1' or a remote IP
-        'PORT': '3306',        # default MySQL port
+        'NAME': os.getenv('MYSQL_DATABASE', 'medihub'),
+        'USER': os.getenv('MYSQL_USER', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', ''),
+        'HOST': os.getenv('MYSQL_HOST', 'localhost'),
+        'PORT': os.getenv('MYSQL_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
