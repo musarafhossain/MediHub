@@ -9,6 +9,7 @@ services:
       - 80:80
     depends_on:
       - django_app
+
   django_app:
     image: django_app
     build:
@@ -16,11 +17,15 @@ services:
     container_name: "django_cont"
     ports:
       - 8001:8001
-    command: gunicorn main.wsgi --bind 0.0.0.0:8001
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             gunicorn main.wsgi --bind 0.0.0.0:8001"
     env_file:
       - ".env"
     depends_on:
       - db
+
   db:
     image: mysql
     container_name: "db_cont"
