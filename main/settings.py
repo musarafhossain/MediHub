@@ -135,13 +135,20 @@ USE_TZ = True
 
 # settings.py
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Collects static files from all apps to this dir (for production use with collectstatic)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Optional: Only used in development to serve custom static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Media files (user-uploaded content)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

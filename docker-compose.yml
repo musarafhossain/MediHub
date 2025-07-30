@@ -18,13 +18,21 @@ services:
     ports:
       - 8001:8001
     command: >
-      sh -c "python manage.py makemigrations &&
-             python manage.py migrate &&
-             gunicorn main.wsgi --bind 0.0.0.0:8001"
+      sh -c "
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        gunicorn main.wsgi --bind 0.0.0.0:8001
+      "
     env_file:
       - ".env"
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8001/admin || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
 
   db:
     image: mysql
@@ -34,3 +42,9 @@ services:
       - MYSQL_DATABASE=medihub
     volumes:
       - ./data/mysql/db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
